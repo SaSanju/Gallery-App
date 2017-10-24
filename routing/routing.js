@@ -115,8 +115,8 @@ router.post('/deleteimage', (req, res) => {
       return res.status(404).send();
     }
     console.log(image);
-    // var fPath = './uploads/' + image.imagename;
-    // fs.unlinkSync(fPath);
+    var fPath = './uploads/' + image.imagename;
+    fs.unlinkSync(fPath);
     return res.json({ success: true });
   })
 });
