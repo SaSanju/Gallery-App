@@ -1,0 +1,118 @@
+<div class="container">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">Create Sessions</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-6 col-md-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="sessionname" [(ngModel)]="sessionname" required>
+                            <div class="input-group-btn">
+                                <button type="button" [disabled]="sessionname == null" (click)="createNewSession()" class="btn btn-default dropdown-toggle"
+                                    aria-haspopup="true" aria-expanded="false">Create New</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-3 col-md-3" *ngFor="let session of totalSessions">
+                        <div class="thumbnail">
+                            <img src="/src/assets/img/Create_Something.jpg">
+                            <div class="caption">
+                                <h3>{{session.sessionname}}</h3>
+                                <!-- <p><li></li></p> -->
+                                <p><a (click)="addImage(session.sessionname)" class="btn btn-primary" role="button">
+                                    <span class="glyphicon glyphicon-upload"></span> Upload</a> <a (click)="showImage(session)"
+                                        class="btn btn-default" role="button">
+                                    <span class="glyphicon glyphicon-plus"></span> View All</a></p>
+                                <div *ngIf="session.images != undefiend">
+                                    <b>Media Files</b>
+                                    <ul class="list-group">
+                                        <li class="list-group-item" *ngFor="let image of session.images">
+                                            {{ image.imagename }} <a (click)="removeImage(image, session.images)" style="float:right" role="button">
+                                                <span class="glyphicon glyphicon-remove"></span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row panel panel-default" *ngIf="uploadImage != null">
+        <div class="panel-body">
+            <div class="col-md-4">
+                <h2>Upload Image For <b>{{uploadImage}}</b></h2>
+                <form>
+                    <div class="form-group">
+                        <label for="single">Select your image:</label>
+                        <input type="file" class="form-control" name="single" ng2FileSelect [uploader]="uploader" />
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-8">
+                <h3>Image Upload</h3>
+                Number of images: {{ uploader?.queue?.length }}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="50%">Name</th>
+                            <th>Size</th>
+                            <th>Progress</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of uploader.queue">
+                            <td><strong>{{ item.file.name }}</strong></td>
+                            <td nowrap>{{ item.file.size/1024/1024 | number:'.2' }} MB</td>
+                            <td>
+                                <div class="progress" style="margin-bottom: 0;">
+                                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+                                <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+                                <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+                            </td>
+                            <td nowrap>
+                                <button type="button" class="btn btn-success btn-xs" (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                        <span class="glyphicon glyphicon-upload"></span> Upload
+                    </button>
+                                <button type="button" class="btn btn-warning btn-xs" (click)="item.cancel()" [disabled]="!item.isUploading">
+                        <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                    </button>
+                                <button type="button" class="btn btn-danger btn-xs" (click)="item.remove()">
+                        <span class="glyphicon glyphicon-trash"></span> Remove
+                    </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <div>
+                        Upload progress:
+                        <div class="progress" style="">
+                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success btn-s" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                <span class="glyphicon glyphicon-upload"></span> Upload all
+            </button>
+                    <button type="button" class="btn btn-warning btn-s" (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+                <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
+            </button>
+                    <button type="button" class="btn btn-danger btn-s" (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                <span class="glyphicon glyphicon-trash"></span> Remove all
+            </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

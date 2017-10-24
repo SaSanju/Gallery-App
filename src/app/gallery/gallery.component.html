@@ -1,0 +1,57 @@
+<h2> Welcome {{ currentUser }} </h2>
+
+<h3> {{ title }} </h3>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">All Sessions</div>
+			<div class="panel-body">
+				<div class="col-xs-3 col-md-4" *ngFor="let session of totalSessions">
+					<div class="thumbnail">
+						<div class="caption">
+							<h3>{{session.sessionname}}</h3>
+							<!-- <p><li></li></p> -->
+							<p>
+								<button type="button" class="btn btn-primary" (click)="startSlideShow(session)">
+								<span class="glyphicon glyphicon-play"></span>
+							</button> <button type="button" class="btn btn-primary" (click)="showImage(session)">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+							</p>
+							<div *ngIf="session.images != undefiend">
+								<b>Media Files</b>
+								<ul class="list-group" dnd-sortable-container [sortableData]="session.images">
+									<li *ngFor="let image of session.images; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">
+										{{ image.imagename }}
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="row">
+			<div class="form-group col-xs-4">
+				<label>Image  Transition Time</label>
+				<select class="form-control" name="time" [(ngModel)]="imageSlideTime">
+					<option *ngFor="let t of times" [value]="t.value">  
+					{{t.display}}
+					</option>
+				</select>
+			</div>
+		</div>
+		<vg-player (onPlayerReady)="onPlayerReady($event)">
+			<video [hidden]="!vPlayer" [vgMedia]="media" autoplay (ended)="myAddListener()" #media id="singleVideo" preload="auto" controls>
+				<source src="" type="video/mp4">
+			</video>
+			<img [hidden]="vPlayer" style="min-height:100%;min-width:100%;" width="200" height="200">
+		</vg-player>
+		<button *ngIf="visibleImages.length != 0" type="button" class="btn btn-danger btn-big btn-warning" (click)="stopPlayer()">
+			<span class="glyphicon glyphicon-stop"></span> Stop
+		</button>
+	</div>
+</div>

@@ -1,0 +1,17 @@
+<div class="row">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand logo" href="#"> {{ title }} </a>
+			</div>
+			<ul class="nav navbar-nav">
+				<li><a *ngIf="authService.loggedIn()" class="nav-link" routerLink="/gallery">Gallery</a></li>
+				<li><a *ngIf="authService.loggedIn()" class="nav-link" routerLink="/upload">Upload</a></li>
+				<li><a *ngIf="!authService.loggedIn()" class="nav-link" routerLink="/login">Login</a></li>
+				<li><a *ngIf="!authService.loggedIn()" class="nav-link" routerLink="/register">Register</a></li>
+				<li><a *ngIf="authService.loggedIn()" href="" class="nav-link" (click)="onLogout()">Logout</a></li>
+			</ul>
+		</div>
+	</nav>
+</div>
+
