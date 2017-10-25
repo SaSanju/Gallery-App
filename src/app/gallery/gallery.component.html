@@ -22,7 +22,7 @@
 							<div *ngIf="session.images != undefiend">
 								<b>Media Files</b>
 								<ul class="list-group" dnd-sortable-container [sortableData]="session.images">
-									<li *ngFor="let image of session.images; let i = index" class="list-group-item" dnd-sortable [sortableIndex]="i">
+									<li *ngFor="let image of session.images; let i = index" (dragend)="dragEnd(session.images)" class="list-group-item" dnd-sortable [sortableIndex]="i">
 										{{ image.imagename }}
 									</li>
 								</ul>

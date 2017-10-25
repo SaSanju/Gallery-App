@@ -15,18 +15,22 @@ export class ImageService {
   private createScessionUrl = 'http://localhost:3000/api/createsession';
   private getScessionUrl = 'http://localhost:3000/api/getsession';
   private removeImageUrl = 'http://localhost:3000/api/deleteimage';
+  private updateImageUrl = 'http://localhost:3000/api/imageindex';
 
   getImages(sName) {
-    // return this.visibleImages = IMAGES.slice(0);
     let data = localStorage.getItem('uname');
     return this.http.post(this.galleryUrl, { username: data, sessionname: sName })
       .map(res => res.json());
   }
 
   removeImage(id) {
-    // return this.visibleImages = IMAGES.slice(0);
     let data = localStorage.getItem('uname');
     return this.http.post(this.removeImageUrl, { username: data, id: id })
+      .map(res => res.json());
+  }
+
+  updateImage(id, index) {
+    return this.http.post(this.updateImageUrl, { index: index, id: id })
       .map(res => res.json());
   }
 

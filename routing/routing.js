@@ -74,6 +74,16 @@ router.get('/users', (req, res) => {
 router.post('/gallery', (req, res) => {
   mongoose.model('images').find({ username: req.body.username, sessionname: req.body.sessionname }, function (err, images) {
     res.send(images);
+  }).sort({"imageindex": 1});
+});
+
+router.post('/imageindex', (req, res) => {
+  Image.findOneAndUpdate({ _id: req.body.id }, { imageindex: req.body.index }, function (err, images) {
+   if (err) {
+      console.log(err);
+      return res.status(500).send();
+    }
+    return res.json({ success: true, images: images });
   });
 });
 

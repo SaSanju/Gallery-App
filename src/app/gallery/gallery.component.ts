@@ -49,6 +49,20 @@ export class GalleryComponent implements OnInit {
       });
   }
 
+  dragEnd(images) {
+    let items = images;
+    for (var index = 0; index < items.length; index++) {
+      var element = items[index];
+      this.imageService.updateImage(element._id, index)
+      .subscribe(data => {
+        if (data.success) {
+          console.log('Suffeling Successful');
+        }
+      });
+    }
+
+  }
+
   startSlideShow(session) {
     this.api.fsAPI.toggleFullscreen();
 
