@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ImageService } from '../shared/image.service';
 import { CategoryService } from '../shared/category.service';
 import { Observable } from 'rxjs/Rx';
 import { VgAPI } from 'videogular2/core';
 import { DndModule } from 'ng2-dnd';
+import { QRCodeComponent } from 'angular2-qrcode';
 
 
 @Component({
@@ -32,7 +34,7 @@ export class GalleryComponent implements OnInit {
     { value: 6000, display: '6 Sec' }
   ];
 
-  constructor(private imageService: ImageService, public api: VgAPI,
+  constructor(private imageService: ImageService, public api: VgAPI, public router: Router,
     private categoryService: CategoryService) {
     this.categoryService.getRootCategory()
       .subscribe(data => {
@@ -40,12 +42,6 @@ export class GalleryComponent implements OnInit {
           this.catones = data;
         }
       });
-    // this.imageService.getSessions()
-    //   .subscribe(data => {
-    //     if (data.sessions.length) {
-    //       this.totalSessions = data.sessions;
-    //     }
-    //   });
   }
 
   populateSubCategoriesII(id) {
@@ -102,6 +98,10 @@ export class GalleryComponent implements OnInit {
   }
 
   showImage(session) {
+    if (session.images) {
+      session.images = null;
+      return;
+    }
     this.imageService.getImages(session.sessionname)
       .subscribe(images => {
         if (images.length) {
@@ -115,15 +115,20 @@ export class GalleryComponent implements OnInit {
     for (var index = 0; index < items.length; index++) {
       var element = items[index];
       this.imageService.updateImage(element._id, index)
-      .subscribe(data => {
-        if (data.success) {
-          console.log('Suffeling Successful');
-        }
-      });
+        .subscribe(data => {
+          if (data.success) {
+            console.log('Suffeling Successful');
+          }
+        });
     }
 
   }
 
+  startSlideShow(session) {
+    this.router.navigate(['/slideshow', session.sessionname]);
+  }
+
+  /*
   startSlideShow(session) {
     this.api.fsAPI.toggleFullscreen();
 
@@ -139,7 +144,7 @@ export class GalleryComponent implements OnInit {
           }
         });
     }
-  }
+  }*/
 
   slideshow() {
     var myVideo = document.getElementsByTagName('video')[0];

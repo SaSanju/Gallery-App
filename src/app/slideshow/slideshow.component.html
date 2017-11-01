@@ -1,1 +1,30 @@
-<!--component html goes here -->
+<h2> Welcome {{ currentUser }} </h2>
+
+<h3> {{ title }} </h3>
+
+<div class="row">
+	<div class="col-md-6">
+		<div class="row">
+			<div class="form-group col-xs-4">
+				<label>Image  Transition Time</label>
+				<select class="form-control" name="time" [(ngModel)]="imageSlideTime">
+					<option *ngFor="let t of times" [value]="t.value">  
+					{{t.display}}
+					</option>
+				</select>
+			</div>
+		</div>
+		<vg-player (onPlayerReady)="onPlayerReady($event)">
+			<video [hidden]="!vPlayer" [vgMedia]="media" autoplay (ended)="myAddListener()" #media id="singleVideo" preload="auto" controls>
+				<source src="" type="video/mp4">
+			</video>
+			<div [hidden]="vPlayer" class="image-player">
+				<img style="min-height:100%;min-width:100%;" width="200" height="200">
+				<h2 class="image-text">{{imageTitle}}</h2>
+			</div>
+		</vg-player>
+		<button *ngIf="visibleImages.length != 0" type="button" class="btn btn-danger btn-big btn-warning" (click)="stopPlayer()">
+			<span class="glyphicon glyphicon-stop"></span> Stop
+		</button>
+	</div>
+</div>

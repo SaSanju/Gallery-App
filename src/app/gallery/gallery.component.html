@@ -38,6 +38,9 @@
 					<div class="col-xs-3 col-md-4" *ngFor="let session of totalSessions">
 						<div class="thumbnail">
 							<div class="caption">
+								<div>
+									<qr-code [value]="session.sessionname" [size]="145"></qr-code>
+								</div>
 								<h3>{{session.sessionname}}</h3>
 								<!-- <p><li></li></p> -->
 								<p>

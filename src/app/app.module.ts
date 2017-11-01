@@ -7,6 +7,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AlertModule } from 'ngx-bootstrap';
 import { VgCoreModule } from 'videogular2/core';
 import { DndModule } from 'ng2-dnd';
+import { QRCodeModule } from 'angular2-qrcode';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -47,7 +48,7 @@ const ROUTES = [
   },
   {
     path: 'slideshow/:id',
-    component: GalleryComponent,
+    component: SlideshowComponent,
     canActivate: [AuthGuard]
   },
   {
@@ -81,6 +82,7 @@ const ROUTES = [
     FormsModule,
     HttpModule,
     VgCoreModule,
+    QRCodeModule,
     AlertModule.forRoot(),
     RouterModule.forRoot(ROUTES),
     DndModule.forRoot()
