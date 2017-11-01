@@ -47,7 +47,7 @@ export class AuthService {
 
   adminLogIn() {
     let data = localStorage.getItem('uname');
-    if (data == "Admin") {
+    if (data == "Admin" && this.loggedIn()) {
       return true;
     } else {
       return false;

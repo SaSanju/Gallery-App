@@ -10,6 +10,7 @@ import { DndModule } from 'ng2-dnd';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { SlideshowComponent } from './slideshow/slideshow.component';
 import { HeaderComponent } from './header/header.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import { AdminComponent } from './admin/admin.component';
@@ -45,6 +46,11 @@ const ROUTES = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'slideshow/:id',
+    component: GalleryComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'upload',
     component: UploadComponent,
     canActivate: [AuthGuard]
@@ -63,6 +69,7 @@ const ROUTES = [
     LoginComponent,
     HeaderComponent,
     GalleryComponent,
+    SlideshowComponent,
     ImageComponent,
     UploadComponent,
     AdminComponent,

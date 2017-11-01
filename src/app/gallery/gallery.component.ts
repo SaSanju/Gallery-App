@@ -170,6 +170,7 @@ export class GalleryComponent implements OnInit {
       if (this.visibleImages[this.currentIndex].imagetype == 'image') {
         this.vPlayer = false;
         myImage.src = './uploads/' + this.visibleImages[this.currentIndex].imagename;
+        this.imageTitle = this.visibleImages[this.currentIndex].imagetitle;
         setTimeout(() => {
           this.myAddListener();
         }, this.imageSlideTime);
