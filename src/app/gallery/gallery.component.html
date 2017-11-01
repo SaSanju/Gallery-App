@@ -7,25 +7,55 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">All Sessions</div>
 			<div class="panel-body">
-				<div class="col-xs-3 col-md-4" *ngFor="let session of totalSessions">
-					<div class="thumbnail">
-						<div class="caption">
-							<h3>{{session.sessionname}}</h3>
-							<!-- <p><li></li></p> -->
-							<p>
-								<button type="button" class="btn btn-primary" (click)="startSlideShow(session)">
+				<div class="row">
+					<div class="form-group col-xs-4">
+						<label>Select Category I</label>
+						<select class="form-control" name="time" [(ngModel)]="catone" (click)="populateSubCategoriesII(catone)">
+                            <option *ngFor="let t of catones" [value]="t._id">  
+                            {{t.categoryname}}
+                            </option>
+                        </select>
+					</div>
+					<div class="form-group col-xs-4" *ngIf="catone != null && catones.length != 0">
+						<label>Select Category II</label>
+						<select class="form-control" name="time" [(ngModel)]="cattwo" (click)="populateSubCategoriesIII(cattwo)">
+                            <option *ngFor="let t of cattwos" [value]="t._id">  
+                            {{t.categoryname}}
+                            </option>
+                        </select>
+					</div>
+					<div class="form-group col-xs-4" *ngIf="cattwo != null && cattwos.length != 0">
+						<label>Select Category III</label>
+						<select class="form-control" name="time" [(ngModel)]="catthree" (click)="populateSessions(catthree)">
+                            <option *ngFor="let t of catthrees" [value]="t._id">  
+                            {{t.categoryname}}
+                            </option>
+                        </select>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-xs-3 col-md-4" *ngFor="let session of totalSessions">
+						<div class="thumbnail">
+							<div class="caption">
+								<h3>{{session.sessionname}}</h3>
+								<!-- <p><li></li></p> -->
+								<p>
+									<button type="button" class="btn btn-primary" (click)="startSlideShow(session)">
 								<span class="glyphicon glyphicon-play"></span>
 							</button> <button type="button" class="btn btn-primary" (click)="showImage(session)">
 								<span class="glyphicon glyphicon-plus"></span>
 							</button>
-							</p>
-							<div *ngIf="session.images != undefiend">
-								<b>Media Files</b>
-								<ul class="list-group" dnd-sortable-container [sortableData]="session.images">
-									<li *ngFor="let image of session.images; let i = index" (dragend)="dragEnd(session.images)" class="list-group-item" dnd-sortable [sortableIndex]="i">
-										{{ image.imagename }}
-									</li>
-								</ul>
+								</p>
+								<div *ngIf="session.images != undefiend">
+									<b>Media Files</b>
+									<ul class="list-group" dnd-sortable-container [sortableData]="session.images">
+										<li *ngFor="let image of session.images; let i = index" (dragend)="dragEnd(session.images)" class="list-group-item" dnd-sortable
+										 [sortableIndex]="i">
+											{{ image.imagename }}
+										</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -48,7 +78,10 @@
 			<video [hidden]="!vPlayer" [vgMedia]="media" autoplay (ended)="myAddListener()" #media id="singleVideo" preload="auto" controls>
 				<source src="" type="video/mp4">
 			</video>
-			<img [hidden]="vPlayer" style="min-height:100%;min-width:100%;" width="200" height="200">
+			<div [hidden]="vPlayer" class="image-player">
+				<img style="min-height:100%;min-width:100%;" width="200" height="200">
+				<h2 class="image-text">{{imageTitle}}</h2>
+			</div>
 		</vg-player>
 		<button *ngIf="visibleImages.length != 0" type="button" class="btn btn-danger btn-big btn-warning" (click)="stopPlayer()">
 			<span class="glyphicon glyphicon-stop"></span> Stop

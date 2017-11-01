@@ -30,8 +30,12 @@ export class LoginComponent implements OnInit {
     .subscribe(data => {
     if(data.success){
       console.log(data);
-      this.router.navigate(['gallery']);
       this.authService.storeUserData(data.username, data.token);
+      if(data.username == "Admin") {
+        this.router.navigate(['admin']);
+        return;
+      }
+      this.router.navigate(['gallery']);
 
     }
     else{

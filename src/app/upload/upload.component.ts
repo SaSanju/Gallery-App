@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
 import { ImageService } from '../shared/image.service';
+import { CategoryService } from '../shared/category.service';
 
 const URL = 'http://localhost:3000/upload';
 
@@ -14,16 +15,67 @@ export class UploadComponent implements OnInit {
   sessionname: String;
   totalSessions: any[] = [];
   uploadImage: null;
+  catones: any[] = [];
+  cattwos: any[] = [];
+  catthrees: any[] = [];
 
   public uploader: FileUploader = new FileUploader({ url: URL });
 
-  constructor(private imageService: ImageService) {
-    this.imageService.getSessions()
+  constructor(private imageService: ImageService, private categoryService: CategoryService) {
+    this.categoryService.getRootCategory()
       .subscribe(data => {
-        if (data.sessions.length) {
-          this.totalSessions = data.sessions;
+        if (data.length) {
+          this.catones = data;
         }
       });
+  }
+
+  populateSubCategoriesII(id) {
+    this.cattwos = [];
+    this.catthrees = [];
+    this.totalSessions = [];
+    if (id) {
+      this.categoryService.getSubCategory(id)
+        .subscribe(data => {
+          if (data) {
+            this.cattwos = data.childcategories;
+          }
+        });
+    }
+  }
+
+  populateSubCategoriesIII(id) {
+    this.catthrees = [];
+    this.totalSessions = [];
+    if (id) {
+      this.categoryService.getSubCategory(id)
+        .subscribe(data => {
+          if (data) {
+            this.catthrees = data.childcategories;
+          }
+        });
+    }
+  }
+
+  populateSessions(categoryId) {
+    this.totalSessions = [];
+    if (categoryId) {
+      let category = this.catthrees.find(function (ele) {
+        return ele._id === categoryId
+      });
+      console.log(category)
+      if (category) {
+        let categoryname = category.categoryname;
+        if (categoryname) {
+          this.imageService.getSessions(categoryname)
+            .subscribe(data => {
+              if (data.sessions.length) {
+                this.totalSessions = data.sessions;
+              }
+            });
+        }
+      }
+    }
   }
 
   addImage(sName) {
@@ -55,16 +107,22 @@ export class UploadComponent implements OnInit {
       });
   }
 
-  createNewSession() {
-    let sessionname = this.sessionname
-    this.imageService.createSessions(sessionname)
+  createNewSession(categoryId) {
+    let sessionname = this.sessionname;
+    let category = this.catthrees.find(function (ele) {
+      return ele._id === categoryId
+    });
+    let categoryname = category.categoryname;
+    if (categoryname) {
+      this.imageService.createSessions(sessionname, categoryname)
 
-      .subscribe(data => {
-        if (data.success) {
-          this.sessionname = null;
-          this.totalSessions.push(data.session);
-        }
-      });
+        .subscribe(data => {
+          if (data.success) {
+            this.sessionname = null;
+            this.totalSessions.push(data.session);
+          }
+        });
+    }
   };
 
 

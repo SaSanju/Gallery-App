@@ -12,8 +12,10 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HeaderComponent } from './header/header.component';
 import { GalleryComponent } from './gallery/gallery.component';
+import { AdminComponent } from './admin/admin.component';
 import { ImageComponent } from './image/image.component';
 import { ImageService } from './shared/image.service';
+import { CategoryService } from './shared/category.service';
 import { AuthService } from './shared/auth.service';
 import { UploadComponent } from './upload/upload.component';
 import { AuthGuard } from './shared/auth.guard';
@@ -46,6 +48,11 @@ const ROUTES = [
     path: 'upload',
     component: UploadComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard]
   }
 
 ];
@@ -58,6 +65,7 @@ const ROUTES = [
     GalleryComponent,
     ImageComponent,
     UploadComponent,
+    AdminComponent,
     FileSelectDirective,
     RegisterComponent
   ],
@@ -70,7 +78,7 @@ const ROUTES = [
     RouterModule.forRoot(ROUTES),
     DndModule.forRoot()
   ],
-  providers: [ImageService, AuthService, AuthGuard],
+  providers: [ImageService, AuthService, CategoryService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

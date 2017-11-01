@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { ImageService } from '../shared/image.service';
+import { CategoryService } from '../shared/category.service';
 import { Observable } from 'rxjs/Rx';
 import { VgAPI } from 'videogular2/core';
 import { DndModule } from 'ng2-dnd';
@@ -19,7 +20,11 @@ export class GalleryComponent implements OnInit {
   totalSessions: any[];
   currentIndex = 0;
   imageSlideTime: Number = 2000;
+  imageTitle: String;
   vPlayer = true;
+  catones: any[] = [];
+  cattwos: any[] = [];
+  catthrees: any[] = [];
 
   public times = [
     { value: 2000, display: '2 Sec' },
@@ -27,14 +32,70 @@ export class GalleryComponent implements OnInit {
     { value: 6000, display: '6 Sec' }
   ];
 
-  constructor(private imageService: ImageService, public api: VgAPI) {
-    this.imageService.getSessions()
+  constructor(private imageService: ImageService, public api: VgAPI,
+    private categoryService: CategoryService) {
+    this.categoryService.getRootCategory()
       .subscribe(data => {
-        if (data.sessions.length) {
-          this.totalSessions = data.sessions;
+        if (data.length) {
+          this.catones = data;
         }
       });
+    // this.imageService.getSessions()
+    //   .subscribe(data => {
+    //     if (data.sessions.length) {
+    //       this.totalSessions = data.sessions;
+    //     }
+    //   });
   }
+
+  populateSubCategoriesII(id) {
+    this.cattwos = [];
+    this.catthrees = [];
+    this.totalSessions = [];
+    if (id) {
+      this.categoryService.getSubCategory(id)
+        .subscribe(data => {
+          if (data) {
+            this.cattwos = data.childcategories;
+          }
+        });
+    }
+  }
+
+  populateSubCategoriesIII(id) {
+    this.catthrees = [];
+    this.totalSessions = [];
+    if (id) {
+      this.categoryService.getSubCategory(id)
+        .subscribe(data => {
+          if (data) {
+            this.catthrees = data.childcategories;
+          }
+        });
+    }
+  }
+
+  populateSessions(categoryId) {
+    this.totalSessions = [];
+    if (categoryId) {
+      let category = this.catthrees.find(function (ele) {
+        return ele._id === categoryId
+      });
+      console.log(category)
+      if (category) {
+        let categoryname = category.categoryname;
+        if (categoryname) {
+          this.imageService.getSessions(categoryname)
+            .subscribe(data => {
+              if (data.sessions.length) {
+                this.totalSessions = data.sessions;
+              }
+            });
+        }
+      }
+    }
+  }
+
 
   onPlayerReady(api: VgAPI) {
     this.api = api;
@@ -88,6 +149,7 @@ export class GalleryComponent implements OnInit {
     if (this.visibleImages[this.currentIndex].imagetype == 'image') {
       this.vPlayer = false;
       myImage.src = './uploads/' + this.visibleImages[this.currentIndex].imagename;
+      this.imageTitle = this.visibleImages[this.currentIndex].imagetitle;
       setTimeout(() => {
         this.myAddListener();
       }, this.imageSlideTime);

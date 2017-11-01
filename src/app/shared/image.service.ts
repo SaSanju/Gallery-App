@@ -34,10 +34,11 @@ export class ImageService {
       .map(res => res.json());
   }
 
-  createSessions(sessionname) {
+  createSessions(sessionname, categoryname) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let data = { username: localStorage.getItem('uname'), sessionname: sessionname };
+    let data = { username: localStorage.getItem('uname'),
+     sessionname: sessionname, categoryname: categoryname };
     return this.http.post(this.createScessionUrl, JSON.stringify(data), { headers: headers })
       .map(
       res => res.json(),
@@ -45,10 +46,10 @@ export class ImageService {
       );
   }
 
-  getSessions() {
+  getSessions(categoryname) {
     // return this.visibleImages = IMAGES.slice(0);
     let data = localStorage.getItem('uname');
-    return this.http.post(this.getScessionUrl, { username: data })
+    return this.http.post(this.getScessionUrl, { username: data, categoryname: categoryname })
       .map(res => res.json());
   }
 

@@ -1,0 +1,60 @@
+<h2> Welcome To Admin Panel </h2>
+
+<h3> {{ title }} </h3>
+<br>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">Categories</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-6 col-md-3">
+                    <div class="input-group" *ngIf="pathCategories.length == 0">
+                        <input type="text" class="form-control" name="categoryname" [(ngModel)]="categoryname" required>
+                        <div class="input-group-btn">
+                            <button type="button" [disabled]="categoryname == null" (click)="createNewCategory()" class="btn btn-success dropdown-toggle"
+                                aria-haspopup="true" aria-expanded="false">Create Root Category</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="margin">
+                <button type="button" *ngIf="pathCategories.length != 0" (click)="populateRootCategories()" class="btn btn-default dropdown-toggle"
+                    aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-chevron-left"></span>Root Categories</button>
+            </div>
+            <ol class="breadcrumb" *ngIf="pathCategories.length != 0">
+                <li *ngFor="let c of pathCategories; let last = last" [ngClass]="{ active: last }" class="root-class" (click)="getSubCategories(c)">{{ c.categoryname }}</li>
+            </ol>
+            <div class="row">
+                <div class="col-md-4 col-md-3" *ngFor="let ct of categories; let i = index">
+                    <div class="thumbnail">
+                        <button style="float:right" class="btn btn-danger" (click)="removeCategory(ct, i)">
+                            <span class="glyphicon glyphicon-remove"></span></button>
+                        <button style="float:right;margin-right:2px;" class="btn btn-info" (click)="toggleUpdate(ct, i)">
+                            <span class="glyphicon glyphicon-edit"></span></button>
+                        <div class="caption clickable" (click)="getSubCategories(ct)">
+                            <h3>{{ct.categoryname}}</h3>
+                        </div>
+                        <div class="caption input-group" *ngIf="ct.isEdit == true">
+                            <input type="text" class="form-control" name="categoryname" [(ngModel)]="ct.categoryname" required>
+                            <div class="input-group-btn">
+                                <button type="button" [disabled]="ct.categoryname == null" (click)="editCategory(ct)" class="btn btn-success dropdown-toggle"
+                                    aria-haspopup="true" aria-expanded="false">Update</button>
+                            </div>
+                        </div>
+                        <div class="caption input-group" *ngIf="pathCategories.length < 2">
+                            <div class="input-group-btn">
+                                <button type="button" [disabled]="ct.subcategoryname == null" (click)="createNewSubCategory(ct)" class="btn btn-default dropdown-toggle"
+                                    aria-haspopup="true" aria-expanded="false">Sub Category</button>
+                            </div>
+                            <input type="text" class="form-control" name="categoryname" [(ngModel)]="ct.subcategoryname" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

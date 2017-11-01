@@ -2,3 +2,16 @@ ul {
 	padding: 0;
 	margin: 20px auto;
 }
+
+.image-player {
+    position: relative; 
+    width: 100%; /* for IE 6 */
+}
+
+.image-text { 
+   position: absolute; 
+   top: 50px; 
+   left: 10px; 
+   width: 100%; 
+}
+

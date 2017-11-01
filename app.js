@@ -14,7 +14,10 @@ mongoose.Promise = global.Promise;
 let port = 3000;
 const Image = require('./models/Image.js');
 const app = express();
-const main = require('./routing/routing.js');
+const userAPI = require('./routing/userRouting.js');
+const categoryAPI = require('./routing/categoryRouting.js');
+const imageAPI = require('./routing/imageRouting.js');
+
 const dbURI = 'mongodb://127.0.0.1/gallery-app';
 
 app.use(express.static('public'));
@@ -40,7 +43,9 @@ app.get('/', function(req, res){
 
 
 app.options('/api');
-app.use('/api', main);
+app.use('/api', userAPI);
+app.use('/api', categoryAPI);
+app.use('/api', imageAPI);
 
 //DB connection
     
@@ -88,6 +93,7 @@ app.post('/upload', function(req, res) {
 
         let newimage = new Image();
         newimage.imagename = req.file.filename;
+        newimage.imagetitle = req.file.originalname;
         newimage.imagetype = filetype[0];
         newimage.username = req.headers.name;
         newimage.sessionname = req.body.sessionname;
@@ -105,6 +111,6 @@ app.post('/upload', function(req, res) {
 
 
 app.listen(port, function(){
-	console.log('Gallery API');
+	console.log('Server is listening at ' + port);
 })
 
