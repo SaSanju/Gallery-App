@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { ImageService } from '../shared/image.service';
 import { CategoryService } from '../shared/category.service';
 import { Observable } from 'rxjs/Rx';
-import { VgAPI } from 'videogular2/core';
 import { DndModule } from 'ng2-dnd';
 import { QRCodeComponent } from 'angular2-qrcode';
 
@@ -18,23 +17,14 @@ export class GalleryComponent implements OnInit {
 
   title = 'Recent Media Files';
   currentUser = localStorage.getItem('uname');
-  visibleImages: any[] = [];
+  // visibleImages: any[] = [];
   totalSessions: any[];
-  currentIndex = 0;
-  imageSlideTime: Number = 2000;
-  imageTitle: String;
-  vPlayer = true;
   catones: any[] = [];
   cattwos: any[] = [];
   catthrees: any[] = [];
 
-  public times = [
-    { value: 2000, display: '2 Sec' },
-    { value: 4000, display: '4 Sec' },
-    { value: 6000, display: '6 Sec' }
-  ];
 
-  constructor(private imageService: ImageService, public api: VgAPI, public router: Router,
+  constructor(private imageService: ImageService, public router: Router,
     private categoryService: CategoryService) {
     this.categoryService.getRootCategory()
       .subscribe(data => {
@@ -77,7 +67,6 @@ export class GalleryComponent implements OnInit {
       let category = this.catthrees.find(function (ele) {
         return ele._id === categoryId
       });
-      console.log(category)
       if (category) {
         let categoryname = category.categoryname;
         if (categoryname) {
@@ -90,11 +79,6 @@ export class GalleryComponent implements OnInit {
         }
       }
     }
-  }
-
-
-  onPlayerReady(api: VgAPI) {
-    this.api = api;
   }
 
   showImage(session) {
@@ -145,53 +129,6 @@ export class GalleryComponent implements OnInit {
         });
     }
   }*/
-
-  slideshow() {
-    var myVideo = document.getElementsByTagName('video')[0];
-    var myImage = document.getElementsByTagName('img')[0];
-
-    this.currentIndex = 0;
-    if (this.visibleImages[this.currentIndex].imagetype == 'image') {
-      this.vPlayer = false;
-      myImage.src = './uploads/' + this.visibleImages[this.currentIndex].imagename;
-      this.imageTitle = this.visibleImages[this.currentIndex].imagetitle;
-      setTimeout(() => {
-        this.myAddListener();
-      }, this.imageSlideTime);
-    } else {
-      this.vPlayer = true;
-      myVideo.src = './uploads/' + this.visibleImages[this.currentIndex].imagename;
-      myVideo.load();
-    }
-  }
-
-  myAddListener() {
-    // console.log('nextItem');
-    var myVideo = document.getElementsByTagName('video')[0];
-    var myImage = document.getElementsByTagName('img')[0];
-    this.currentIndex = (this.currentIndex + 1) % this.visibleImages.length;
-
-    if (this.visibleImages.length) {
-      if (this.visibleImages[this.currentIndex].imagetype == 'image') {
-        this.vPlayer = false;
-        myImage.src = './uploads/' + this.visibleImages[this.currentIndex].imagename;
-        this.imageTitle = this.visibleImages[this.currentIndex].imagetitle;
-        setTimeout(() => {
-          this.myAddListener();
-        }, this.imageSlideTime);
-      } else {
-        this.vPlayer = true;
-        myVideo.src = './uploads/' + this.visibleImages[this.currentIndex].imagename;
-      }
-    }
-  }
-
-  stopPlayer() {
-    this.visibleImages = [];
-    var myImage = document.getElementsByTagName('img')[0];
-    var myVideo = document.getElementsByTagName('video')[0];
-    myImage.src = myVideo.src = '/src/assets/img/hqdefault.jpg';
-  }
 
   ngOnInit() {
   }
